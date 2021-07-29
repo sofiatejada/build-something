@@ -55,4 +55,18 @@ describe('book routes', () => {
     });
   });
 
+  it('gets all books', async () => {
+    await Book.insert(kafka);
+    await Book.insert(siddhartha);
+    await Book.insert(handmaid);
+    await Book.insert(pain);
+    await Book.insert(dune);
+
+    return request(app)
+      .get('/api/v1/books')
+      .then((res) => {
+        expect(res.body).toEqual([{ id: '1', ...kafka }, { id: '2', ...siddhartha }, { id:'3', ...handmaid }, { id: '4', ...pain }, { id: '5', ...dune }]);
+      });
+  });
+
 });
