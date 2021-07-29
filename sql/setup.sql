@@ -5,6 +5,6 @@ CREATE TABLE books (
   name TEXT NOT NULL,
   author TEXT NOT NULL,
   genre TEXT NOT NULL,
-  completed BOOL NOT NULL
+  completed BOOLEAN NOT NULL
 )
 
