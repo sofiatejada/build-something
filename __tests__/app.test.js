@@ -69,4 +69,13 @@ describe('book routes', () => {
       });
   });
 
+  it('updates book', async () => {
+    const sent = await Book.insert(kafka);
+    const res = await request(app)
+      .put(`/api/v1/books/${sent.id}`)
+      .send({ completed: true });
+    console.log(res.body);
+
+    expect(res.body).toEqual({ ...sent, completed: true });
+  });
 });
