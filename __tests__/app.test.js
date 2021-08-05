@@ -74,8 +74,17 @@ describe('book routes', () => {
     const res = await request(app)
       .put(`/api/v1/books/${sent.id}`)
       .send({ completed: true });
-    console.log(res.body);
 
     expect(res.body).toEqual({ ...sent, completed: true });
+  });
+
+  it('deletes a book', async () => {
+    const bookToDelete = await Book.insert(siddhartha);
+    const res = await request(app)
+      .delete(`/api/v1/books/${bookToDelete.id}`);
+
+    expect(res.body).toEqual({
+      message: `'${bookToDelete.name}' has been deleted.`
+    });
   });
 });
