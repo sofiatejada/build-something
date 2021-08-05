@@ -55,4 +55,36 @@ describe('book routes', () => {
     });
   });
 
+  it('gets all books', async () => {
+    await Book.insert(kafka);
+    await Book.insert(siddhartha);
+    await Book.insert(handmaid);
+    await Book.insert(pain);
+    await Book.insert(dune);
+
+    return request(app)
+      .get('/api/v1/books')
+      .then((res) => {
+        expect(res.body).toEqual([{ id: '1', ...kafka }, { id: '2', ...siddhartha }, { id:'3', ...handmaid }, { id: '4', ...pain }, { id: '5', ...dune }]);
+      });
+  });
+
+  it('updates book', async () => {
+    const sent = await Book.insert(kafka);
+    const res = await request(app)
+      .put(`/api/v1/books/${sent.id}`)
+      .send({ completed: true });
+
+    expect(res.body).toEqual({ ...sent, completed: true });
+  });
+
+  it('deletes a book', async () => {
+    const bookToDelete = await Book.insert(siddhartha);
+    const res = await request(app)
+      .delete(`/api/v1/books/${bookToDelete.id}`);
+
+    expect(res.body).toEqual({
+      message: `'${bookToDelete.name}' has been deleted.`
+    });
+  });
 });
